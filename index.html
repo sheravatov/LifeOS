@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LifeOS - Gold Edition</title>
+    <title>LifeOS - Final Pro</title>
     
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Libs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
 
@@ -26,81 +28,106 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-body); color: #1e293b; padding-bottom: 90px; }
 
-        /* LOGIN */
+        /* LOGIN SCREEN */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #4f46e5, #818cf8); z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        .login-box { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 320px; text-align: center; }
-        .login-input { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 10px; text-align: center; font-size: 1.2rem; margin: 15px 0; outline:none; }
-        .login-btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .login-box { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .login-input { width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 12px; text-align: center; font-size: 1.5rem; margin: 20px 0; outline:none; letter-spacing: 5px; font-weight: bold; }
+        .login-input:focus { border-color: var(--primary); }
+        .login-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; }
 
-        /* MAIN UI */
+        /* LAYOUT & NAV */
         #mainApp { display: none; }
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
-        .section-view { display: none; animation: fadeIn 0.3s ease; }
-        .section-view.active { display: block; }
+        .section-view { display: none; }
+        .section-view.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* DATE SELECTORS */
-        .date-bar { display: flex; gap: 10px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow); justify-content: center; }
-        .custom-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 1rem; outline: none; background: #f8fafc; font-weight: 600; color: var(--primary); }
-
-        /* NAV */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; }
-        .nav-item { border: none; background: none; display: flex; flex-direction: column; align-items: center; color: var(--secondary); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .nav-item { border: none; background: none; display: flex; flex-direction: column; align-items: center; color: var(--secondary); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .nav-item i { font-size: 20px; margin-bottom: 4px; }
         .nav-item.active { color: var(--primary); transform: translateY(-2px); }
 
-        /* CARDS */
-        .card { background: var(--surface); border-radius: 16px; padding: 15px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; }
-        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        /* COMMON UI */
+        .card { background: var(--surface); border-radius: 16px; padding: 15px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; position: relative; z-index: 1; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; position: relative; z-index: 5; }
+        .header-row h2 { font-size: 1.4rem; margin: 0; }
         
         .btn { padding: 8px 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-size: 0.9rem; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-excel { background: #107c41; color: white; }
+        .btn-danger { background: #fee2e2; color: var(--danger); }
 
-        /* HABIT */
-        .habit-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .stat-box { background: white; padding: 10px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
-        .stat-box h3 { font-size: 1.2rem; color: var(--primary); margin: 0; }
-        .stat-box p { font-size: 0.7rem; color: var(--secondary); margin: 0; }
-        .table-scroll { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th, td { padding: 10px; text-align: center; border: 1px solid var(--border); font-size: 0.9rem; }
-        th:first-child, td:first-child { position: sticky; left: 0; background: white; z-index: 5; border-right: 2px solid var(--primary-soft); text-align: left; }
+        .date-bar { display: flex; gap: 10px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 15px; box-shadow: var(--shadow); justify-content: center; position: relative; z-index: 2; }
+        .custom-select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 1rem; outline: none; background: #f8fafc; font-weight: 600; color: var(--primary); }
+
+        /* --- HABIT TABLE STYLES --- */
+        .stats-card { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 15px; display: flex; justify-content: space-between; text-align: center; }
+        .stat-item h3 { font-size: 1.4rem; color: var(--primary); margin: 0; }
+        .stat-item p { font-size: 0.8rem; color: var(--secondary); margin: 5px 0 0 0; font-weight: 600; }
+        .stat-divider { width: 1px; background: var(--border); }
+
+        .table-scroll { overflow-x: auto; scroll-behavior: smooth; position: relative; border-radius: 12px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        
+        th, td { padding: 10px; text-align: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 0.9rem; background: white; vertical-align: middle; }
+        
+        /* --- MUHIM O'ZGARISH: 1-USTUN (Matn sig'dirish) --- */
+        th:first-child, td:first-child { 
+            position: sticky; left: 0; z-index: 20; 
+            text-align: left; 
+            min-width: 180px; /* Biroz kengaytirdik */
+            max-width: 180px; /* Chegara qo'ydik */
+            background: #ffffff; 
+            border-right: 2px solid var(--primary-soft);
+            
+            /* Matnni pastga tushirish (Wrapping) */
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        
+        thead th:first-child { z-index: 30; } 
+        thead th { position: sticky; top: 0; z-index: 10; background: #f8fafc; font-weight: bold; white-space: nowrap; }
+        
+        .today-header { background-color: var(--primary) !important; color: white !important; }
+        .today-cell { background-color: #e0e7ff; }
+        
         .check-btn { width: 24px; height: 24px; border-radius: 6px; background: #f1f5f9; border: 1px solid #cbd5e1; margin: 0 auto; cursor: pointer; }
         .check-btn.checked { background: var(--success); border-color: var(--success); position: relative; }
         .check-btn.checked::after { content: '✓'; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; }
+        
+        .del-mode-btn { color: var(--danger); font-size: 1.1rem; cursor: pointer; margin-left: 8px; display: none; min-width: 20px; }
+        .editing .del-mode-btn { display: inline-block; }
 
-        /* FINANCE DASHBOARD */
+        /* --- FINANCE --- */
         .fin-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .fin-card { padding: 15px; border-radius: 12px; color: white; position: relative; overflow: hidden; }
+        .fin-card { padding: 15px; border-radius: 12px; color: white; }
         .fin-card.main { grid-column: span 2; background: linear-gradient(135deg, #4f46e5, #3b82f6); text-align: center; }
         .fin-card.inc { background: #10b981; }
         .fin-card.exp { background: #ef4444; }
         .fin-card.debt { background: #f59e0b; grid-column: span 2; display: flex; justify-content: space-between; align-items: center; }
         .fin-card h3 { font-size: 1.5rem; margin: 5px 0; }
 
-        /* INPUT AREA */
         .trans-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .trans-row { display: flex; gap: 10px; }
-        .inp-field { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 1rem; }
-        
+        .inp-field { padding: 12px; border: 1px solid var(--border); border-radius: 10px; outline: none; font-size: 1rem; width: 100%; }
         .btn-green { background: var(--success); color: white; flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
         .btn-red { background: var(--danger); color: white; flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
         .btn-orange { background: var(--warning); color: white; flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
 
-        /* TRANSACTION LIST */
         .trans-list { list-style: none; }
-        .trans-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); background: white; }
-        .trans-item:first-child { border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .trans-item:last-child { border-bottom: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
-        .t-info { display: flex; flex-direction: column; }
-        .t-name { font-weight: 600; color: #334155; }
+        .trans-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px; border-bottom: 1px solid var(--border); background: white; cursor: pointer;
+        }
+        .t-name-box { display: flex; flex-direction: column; max-width: 60%; }
+        .t-name { font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
         .t-date { font-size: 0.75rem; color: #94a3b8; }
-        .t-amount { font-weight: 700; font-size: 1rem; }
+        .t-amount { font-weight: 700; font-size: 1rem; white-space: nowrap; }
         .plus { color: var(--success); }
         .minus { color: var(--danger); }
         .debt-text { color: var(--warning); }
-        .del-btn { color: #cbd5e1; background: none; border: none; padding: 5px; cursor: pointer; }
+        .del-trans-btn { color: #cbd5e1; background: none; border: none; padding: 5px; margin-left: 10px; cursor: pointer; }
 
         /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
@@ -122,14 +149,14 @@
     <!-- LOGIN -->
     <div id="loginScreen">
         <div class="login-box">
-            <h2 style="color:var(--primary); margin-bottom:10px;">LifeOS Gold</h2>
-            <input type="password" id="passInput" class="login-input" placeholder="****" maxlength="4">
+            <h2 style="color:var(--primary); margin-bottom:10px;">LifeOS</h2>
+            <input type="password" id="passInput" class="login-input" placeholder="8908" maxlength="4" inputmode="numeric" pattern="[0-9]*">
             <button class="login-btn" onclick="checkPass()">KIRISH</button>
             <p id="errMsg" style="color:var(--danger); display:none; margin-top:10px;">Xato!</p>
         </div>
     </div>
 
-    <!-- APP -->
+    <!-- MAIN APP -->
     <div id="mainApp">
         <nav class="bottom-nav">
             <button class="nav-item active" onclick="switchTab('habit')"><i class="fa-solid fa-calendar-check"></i> Odatlar</button>
@@ -137,7 +164,7 @@
         </nav>
 
         <div class="container">
-            <!-- DATE SELECTOR (GLOBAL) -->
+            <!-- DATE -->
             <div class="date-bar">
                 <select id="monthSelect" class="custom-select" onchange="changeDate()"></select>
                 <select id="yearSelect" class="custom-select" onchange="changeDate()">
@@ -150,64 +177,62 @@
             <!-- HABIT SECTION -->
             <section id="habit-section" class="section-view active">
                 <div class="header-row">
-                    <h2 style="font-size:1.4rem;">Odatlar</h2>
+                    <h2>Odatlar</h2>
                     <div style="display:flex; gap:8px;">
-                        <button class="btn btn-excel" onclick="exportHabit()"><i class="fa-solid fa-file-excel"></i></button>
-                        <button class="btn btn-primary" onclick="openModal()"><i class="fa-solid fa-plus"></i></button>
+                        <button class="btn btn-danger" onclick="toggleEditMode()" id="editBtn" title="Tahrirlash"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-excel" onclick="exportHabit()" title="Yuklash"><i class="fa-solid fa-file-excel"></i></button>
+                        <button class="btn btn-primary" onclick="openModal()" title="Qo'shish"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>
 
-                <div class="habit-stats">
-                    <div class="stat-box"><h3><span id="hTotal">0</span></h3><p>Jami Odat</p></div>
-                    <div class="stat-box"><h3><span id="hToday">0</span></h3><p>Bugun</p></div>
-                    <div class="stat-box"><h3><span id="hPerc">0%</span></h3><p>Natija</p></div>
+                <div class="stats-card">
+                    <div class="stat-item"><h3 id="hTotal">0</h3><p>Jami</p></div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item"><h3 id="hToday">0</h3><p>Bugun</p></div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item"><h3 id="hPerc">0%</h3><p>Natija</p></div>
                 </div>
 
-                <div class="card" style="padding:0;"><div class="table-scroll"><table id="habitTable"><thead id="habitHead"></thead><tbody id="habitBody"></tbody></table></div></div>
-                <div class="card"><h4>📊 Oylik Dinamika</h4><div style="height: 200px;"><canvas id="habitChart"></canvas></div></div>
+                <div class="card" style="padding:0;">
+                    <div class="table-scroll" id="habitTableContainer">
+                        <table id="habitTable">
+                            <thead id="habitHead"></thead>
+                            <tbody id="habitBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card"><h4>📊 Dinamika</h4><div style="height: 200px;"><canvas id="habitChart"></canvas></div></div>
             </section>
 
             <!-- FINANCE SECTION -->
             <section id="finance-section" class="section-view">
                 <div class="header-row">
-                    <h2 style="font-size:1.4rem;">Moliya</h2>
+                    <h2>Moliya</h2>
                     <button class="btn btn-excel" onclick="exportFinance()"><i class="fa-solid fa-file-excel"></i> Yuklash</button>
                 </div>
 
                 <div class="fin-dashboard">
-                    <div class="fin-card main">
-                        <p style="opacity:0.8; font-size:0.9rem;">Hamyonda bor (Umumiy)</p>
-                        <h3><span id="fBal">0</span> UZS</h3>
-                    </div>
-                    <div class="fin-card inc">
-                        <p>Kirim (<span class="selected-date-label">Oy</span>)</p>
-                        <h3>+<span id="fInc">0</span></h3>
-                    </div>
-                    <div class="fin-card exp">
-                        <p>Xarajat (<span class="selected-date-label">Oy</span>)</p>
-                        <h3>-<span id="fExp">0</span></h3>
-                    </div>
-                    
-                    <div class="fin-card debt">
-                        <div><p style="font-weight:bold;">⚠️ Jami Qarzlarim</p><span style="font-size:0.8rem; opacity:0.8;">Qaytarilishi kerak</span></div>
-                        <h3><span id="fDebt">0</span></h3>
-                    </div>
+                    <div class="fin-card main"><p style="opacity:0.8;">Joriy Balans</p><h3><span id="fBal">0</span> UZS</h3></div>
+                    <div class="fin-card inc"><p>Kirim (<span class="date-label"></span>)</p><h3>+<span id="fInc">0</span></h3></div>
+                    <div class="fin-card exp"><p>Xarajat (<span class="date-label"></span>)</p><h3>-<span id="fExp">0</span></h3></div>
+                    <div class="fin-card debt"><div><p style="font-weight:bold;">⚠️ Jami Qarzlarim</p></div><h3><span id="fDebt">0</span></h3></div>
                 </div>
 
                 <div class="card">
-                    <h4 style="margin-bottom:10px;">Amaliyot turi</h4>
+                    <h4 style="margin-bottom:10px;">Yangi amaliyot</h4>
                     <div class="trans-form">
-                        <input type="text" id="tName" class="inp-field" placeholder="Izoh (Masalan: Bozorlik)">
-                        <input type="number" id="tAmount" class="inp-field" placeholder="Summa">
-                        <div class="trans-row">
-                            <button class="btn-green" onclick="addTrans('inc')">Kirim (+)</button>
-                            <button class="btn-red" onclick="addTrans('exp')">Xarajat (-)</button>
-                            <button class="btn-orange" onclick="addTrans('debt')">Qarz (!)</button>
+                        <input type="text" id="tName" class="inp-field" placeholder="Izoh (Masalan: Tushlik)">
+                        <input type="number" id="tAmount" class="inp-field" placeholder="Summa (UZS)" inputmode="decimal">
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-green" onclick="addTrans('inc')">Kirim</button>
+                            <button class="btn-red" onclick="addTrans('exp')">Xarajat</button>
+                            <button class="btn-orange" onclick="addTrans('debt')">Qarz</button>
                         </div>
                     </div>
                 </div>
 
-                <h4 style="margin:15px 0 10px 5px; color:#64748b;">Tarix (<span class="selected-date-label"></span>)</h4>
+                <h4 style="margin:15px 0 10px 5px; color:#64748b;">Tarix (<span class="date-label"></span>)</h4>
                 <div id="transList" class="trans-list"></div>
             </section>
         </div>
@@ -218,7 +243,8 @@
         <div class="modal-box">
             <h3>Yangi Odat</h3>
             <input type="text" id="newHabitInput" placeholder="Nomi...">
-            <div style="display:flex; gap:10px;">
+            <input type="time" id="newHabitTime">
+            <div style="display:flex; gap:10px; margin-top:10px;">
                 <button class="btn" style="background:#eee; flex:1;" onclick="closeModal()">Bekor</button>
                 <button class="btn btn-primary" style="flex:1;" onclick="saveHabit()">Saqlash</button>
             </div>
@@ -226,7 +252,7 @@
     </div>
 
     <script>
-        // AUTH
+        // --- AUTH ---
         const passInput = document.getElementById('passInput');
         passInput.addEventListener("keypress", (e) => { if(e.key==="Enter") checkPass(); });
         function checkPass() {
@@ -237,23 +263,31 @@
             } else document.getElementById('errMsg').style.display='block';
         }
 
-        // DATA & STATE
+        // --- GLOBAL VARIABLES ---
         const monthsNames = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
-        
-        // Default to current date
         let curY = new Date().getFullYear();
-        let curM = new Date().getMonth(); 
+        let curM = new Date().getMonth();
+        let isEditMode = false;
+        
+        let habits = [], checks = {}, transactions = [];
 
-        let habits = JSON.parse(localStorage.getItem('habits')) || [{id:1, name:"Sport"}, {id:2, name:"Kitob"}];
-        let checks = JSON.parse(localStorage.getItem('checks')) || {};
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        // --- DATA LOADING ---
+        function loadData() {
+            try {
+                habits = JSON.parse(localStorage.getItem('habits')) || [{id:1, name:"Sport", time:"06:00"}];
+                checks = JSON.parse(localStorage.getItem('checks')) || {};
+                transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            } catch (e) {
+                console.error("Data Reset");
+                habits = []; checks = {}; transactions = [];
+            }
+        }
 
         function initApp() {
-            // Fill Selectors
+            loadData();
             const mSel = document.getElementById('monthSelect');
             mSel.innerHTML = monthsNames.map((m, i) => `<option value="${i}" ${i===curM?'selected':''}>${m}</option>`).join('');
             document.getElementById('yearSelect').value = curY;
-
             renderAll();
         }
 
@@ -264,9 +298,7 @@
         }
 
         function renderAll() {
-            // Update labels
-            document.querySelectorAll('.selected-date-label').forEach(el => el.innerText = monthsNames[curM]);
-
+            document.querySelectorAll('.date-label').forEach(el => el.innerText = monthsNames[curM]);
             document.getElementById('hTotal').innerText = habits.length;
             renderHabitTable();
             renderTransList();
@@ -282,33 +314,58 @@
             if(t==='habit') renderHabitChart();
         }
 
-        // --- HABIT ---
+        // --- HABIT LOGIC ---
         function renderHabitTable() {
             const days = new Date(curY, curM+1, 0).getDate();
             const tb = document.getElementById('habitBody');
+            const now = new Date();
+
             let h = '<tr><th>Odat</th>';
             for(let i=1; i<=days; i++) {
-                // Highlight today only if selected year/month matches current real date
-                let isToday = (i===new Date().getDate() && curM===new Date().getMonth() && curY===new Date().getFullYear());
-                h += `<th style="${isToday?'background:#e0e7ff':''}">${i}</th>`;
+                let isToday = (i===now.getDate() && curM===now.getMonth() && curY===now.getFullYear());
+                h += `<th class="${isToday?'today-header':''}">${i}</th>`;
             }
             document.getElementById('habitHead').innerHTML = h+'</tr>';
 
             let html = '', dT=0, dAll=0;
+            
             habits.forEach(hb => {
-                html += `<tr><td>${hb.name}</td>`;
+                let timeStr = hb.time ? `<div style="font-size:0.75rem; color:#64748b;">⏰ ${hb.time}</div>` : '';
+                let delBtn = `<i class="fa-solid fa-trash del-mode-btn" onclick="deleteHabit(${hb.id})"></i>`;
+                
+                // Matn uzun bo'lsa pastga tushadi (CSS da white-space: normal qilingan)
+                html += `<tr><td><div style="font-weight:600; display:flex; justify-content:space-between; align-items:flex-start;"><span>${hb.name}</span> ${delBtn}</div>${timeStr}</td>`;
+                
                 for(let i=1; i<=days; i++) {
                     let k = `${curY}-${curM}_${hb.id}_${i}`, c = checks[k] ? 'checked' : '';
-                    if(c) dAll++; 
-                    if(c && i===new Date().getDate() && curM===new Date().getMonth() && curY===new Date().getFullYear()) dT++;
-                    html += `<td><div class="check-btn ${c}" onclick="togCheck(${hb.id},${i})"></div></td>`;
+                    if(c) dAll++;
+                    if(c && i===now.getDate() && curM===now.getMonth() && curY===now.getFullYear()) dT++;
+                    
+                    let isToday = (i===now.getDate() && curM===now.getMonth() && curY===now.getFullYear());
+                    let isFuture = (curY > now.getFullYear()) || (curY === now.getFullYear() && curM > now.getMonth()) || (curY === now.getFullYear() && curM === now.getMonth() && i > now.getDate());
+
+                    let style = isFuture ? 'pointer-events:none;' : '';
+                    if(isFuture) c = ''; 
+
+                    html += `<td class="${isToday?'today-cell':''}"><div class="check-btn ${c}" style="${style}" onclick="togCheck(${hb.id},${i})"></div></td>`;
                 }
                 html += '</tr>';
             });
             tb.innerHTML = html;
+
+            const table = document.getElementById('habitTable');
+            if(isEditMode) table.classList.add('editing'); else table.classList.remove('editing');
+
             document.getElementById('hToday').innerText = dT;
             document.getElementById('hPerc').innerText = ((habits.length*days) ? Math.round((dAll/(habits.length*days))*100) : 0) + '%';
+            
             renderHabitChart();
+
+            // Auto Scroll
+            setTimeout(() => {
+                const todayHeader = document.querySelector('.today-header');
+                if(todayHeader) todayHeader.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }, 300);
         }
 
         function togCheck(id, d) {
@@ -318,10 +375,25 @@
             renderHabitTable();
         }
 
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('editBtn');
+            btn.innerHTML = isEditMode ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-pen-to-square"></i>';
+            renderHabitTable();
+        }
+
+        function deleteHabit(id) {
+            if(confirm("O'chirmoqchimisiz?")) {
+                habits = habits.filter(h => h.id !== id);
+                localStorage.setItem('habits', JSON.stringify(habits));
+                renderHabitTable();
+            }
+        }
+
         function saveHabit() {
-            let v = document.getElementById('newHabitInput').value;
-            if(v) {
-                habits.push({id:Date.now(), name:v});
+            let n=document.getElementById('newHabitInput').value, t=document.getElementById('newHabitTime').value;
+            if(n) {
+                habits.push({id:Date.now(), name:n, time:t});
                 localStorage.setItem('habits', JSON.stringify(habits));
                 closeModal(); document.getElementById('newHabitInput').value='';
                 renderHabitTable();
@@ -332,57 +404,50 @@
 
         // --- FINANCE ---
         function addTrans(type) {
-            const name = document.getElementById('tName').value;
-            const amount = parseFloat(document.getElementById('tAmount').value);
+            const name=document.getElementById('tName').value, amount=parseFloat(document.getElementById('tAmount').value);
             if(!name || !amount) return alert("To'ldiring!");
-
             const trans = {
-                id: Date.now(),
-                type: type, 
-                name: name,
-                amount: amount,
-                // Store date components to filter easily later
-                d: new Date().getDate(),
-                m: new Date().getMonth(),
-                y: new Date().getFullYear(),
+                id: Date.now(), type: type, name: name, amount: amount,
+                d: new Date().getDate(), m: new Date().getMonth(), y: new Date().getFullYear(),
                 fullDate: new Date().toLocaleDateString('uz-UZ')
             };
-
             transactions.unshift(trans);
             localStorage.setItem('transactions', JSON.stringify(transactions));
-            document.getElementById('tName').value = '';
-            document.getElementById('tAmount').value = '';
+            document.getElementById('tName').value = ''; document.getElementById('tAmount').value = '';
             
-            // If user adds trans, auto-switch view to current date so they see it
-            if(curM !== trans.m || curY !== trans.y) {
-                curM = trans.m; curY = trans.y;
-                document.getElementById('monthSelect').value = curM;
-                document.getElementById('yearSelect').value = curY;
-            }
+            if(curM !== trans.m || curY !== trans.y) { curM = trans.m; curY = trans.y; document.getElementById('monthSelect').value = curM; document.getElementById('yearSelect').value = curY; }
             renderAll();
         }
 
         function renderTransList() {
             const list = document.getElementById('transList');
-            // Filter by selected Month and Year
             const filtered = transactions.filter(t => t.m === curM && t.y === curY);
-
-            if(filtered.length === 0) return list.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8;">Bu oyda yozuvlar yo\'q</div>';
+            if(filtered.length === 0) return list.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8;">Yozuvlar yo\'q</div>';
             
             let html = '';
             filtered.forEach(t => {
-                let cls = t.type==='inc' ? 'plus' : (t.type==='debt' ? 'debt-text' : 'minus');
-                let sign = t.type==='inc' ? '+' : (t.type==='debt' ? '!' : '-');
-                let typeText = t.type==='debt' ? '(Qarzga)' : '';
-
-                html += `<div class="trans-item">
-                    <div class="t-info"><span class="t-name">${t.name} <small style="font-weight:normal; color:#f59e0b">${typeText}</small></span><span class="t-date">${t.fullDate}</span></div>
-                    <div style="display:flex; align-items:center; gap:10px;">
+                let cls = t.type==='inc'?'plus':(t.type==='debt'?'debt-text':'minus');
+                let sign = t.type==='inc'?'+':(t.type==='debt'?'!':'-');
+                let typeText = t.type==='debt'?'(Qarz)':'';
+                
+                html += `
+                <div class="trans-item" onclick="showDetails('${t.name}', '${t.fullDate}', ${t.amount}, '${t.type}')">
+                    <div class="t-name-box">
+                        <span class="t-name">${t.name} <small style="color:#f59e0b;font-weight:normal;">${typeText}</small></span>
+                        <span class="t-date">${t.fullDate}</span>
+                    </div>
+                    <div style="display:flex; align-items:center;">
                         <span class="t-amount ${cls}">${sign} ${fmt(t.amount)}</span>
-                        <button class="del-btn" onclick="delTrans(${t.id})"><i class="fa-solid fa-trash"></i></button>
-                    </div></div>`;
+                        <button class="del-trans-btn" onclick="event.stopPropagation(); delTrans(${t.id})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`;
             });
             list.innerHTML = html;
+        }
+
+        function showDetails(n, d, a, t) {
+            let typeName = t==='inc'?'Kirim':(t==='exp'?'Xarajat':'Qarz');
+            alert(`📌 Tafsilotlar:\n\nIzoh: ${n}\nSana: ${d}\nSumma: ${fmt(a)} UZS\nTuri: ${typeName}`);
         }
 
         function delTrans(id) {
@@ -394,55 +459,43 @@
         }
 
         function updateFinStats() {
-            // Stats for SELECTED month
-            let inc = 0, exp = 0;
-            transactions.filter(t => t.m === curM && t.y === curY).forEach(t => {
-                if(t.type === 'inc') inc += t.amount;
-                else if(t.type === 'exp') exp += t.amount;
-            });
-
-            // Global stats (Total Wallet & Debt) - calculated from ALL history
-            let totalWallet = 0, totalDebt = 0;
-            transactions.forEach(t => {
-                if(t.type === 'inc') totalWallet += t.amount;
-                if(t.type === 'exp') totalWallet -= t.amount;
-                if(t.type === 'debt') totalDebt += t.amount;
-            });
-
+            let inc=0, exp=0, wal=0, debt=0;
+            transactions.filter(t => t.m===curM && t.y===curY).forEach(t => { if(t.type==='inc') inc+=t.amount; else if(t.type==='exp') exp+=t.amount; });
+            transactions.forEach(t => { if(t.type==='inc') wal+=t.amount; if(t.type==='exp') wal-=t.amount; if(t.type==='debt') debt+=t.amount; });
+            
             document.getElementById('fInc').innerText = fmt(inc);
             document.getElementById('fExp').innerText = fmt(exp);
-            document.getElementById('fBal').innerText = fmt(totalWallet); // Global
-            document.getElementById('fDebt').innerText = fmt(totalDebt); // Global
+            document.getElementById('fBal').innerText = fmt(wal);
+            document.getElementById('fDebt').innerText = fmt(debt);
         }
-
         function fmt(n) { return new Intl.NumberFormat('uz-UZ').format(n); }
 
         // --- EXPORT ---
         function exportFinance() {
-            // Filter export for selected month
             let data = [["Sana", "Nomi", "Turi", "Summa"]];
             let filtered = transactions.filter(t => t.m === curM && t.y === curY);
-            
             filtered.forEach(t => {
-                let typeName = t.type==='inc'?'Kirim':(t.type==='debt'?'Qarz (Nasiya)':'Xarajat');
-                data.push([t.fullDate, t.name, typeName, t.amount]);
+                let tn = t.type==='inc'?'Kirim':(t.type==='debt'?'Qarz':'Xarajat');
+                data.push([t.fullDate, t.name, tn, t.amount]);
             });
-            
             let wb = XLSX.utils.book_new();
             let ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{wch:12}, {wch:30}, {wch:10}, {wch:15}];
             XLSX.utils.book_append_sheet(wb, ws, `Moliya_${monthsNames[curM]}`);
             XLSX.writeFile(wb, `Moliya_${monthsNames[curM]}_${curY}.xlsx`);
         }
 
         function exportHabit() {
             const days = new Date(curY, curM+1, 0).getDate();
-            let d = [["Odat"]]; for(let i=1;i<=days;i++) d[0].push(i); d[0].push("Jami");
+            let d = [["Odat", "Vaqt"]]; for(let i=1;i<=days;i++) d[0].push(i); d[0].push("Jami");
             habits.forEach(h=>{
-                let r=[h.name], t=0;
+                let r=[h.name, h.time||''], t=0;
                 for(let i=1;i<=days;i++){ let c=checks[`${curY}-${curM}_${h.id}_${i}`]?1:0; r.push(c); t+=c; }
                 r.push(t); d.push(r);
             });
             let wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(d);
+            let wscols=[{wch:25},{wch:8}]; for(let i=1;i<=days;i++)wscols.push({wch:3}); wscols.push({wch:5});
+            ws['!cols']=wscols;
             XLSX.utils.book_append_sheet(wb, ws, "Odatlar");
             XLSX.writeFile(wb, `Odatlar_${monthsNames[curM]}_${curY}.xlsx`);
         }
